@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beauty Parlour Dashboard</title>
+  <style>
+    /* CSS Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f4f7fa; color: #333; }
+    header { background: #ff6f91; padding: 20px; color: white; text-align: center; }
+    nav { background: #fff; padding: 10px; display: flex; justify-content: center; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    nav button { background: none; border: none; font-size: 1rem; cursor: pointer; padding: 10px; }
+    nav button.active { border-bottom: 2px solid #ff6f91; font-weight: bold; color: #ff6f91; }
+    .container { padding: 20px; }
+    .grid { display: flex; gap: 20px; flex-wrap: wrap; }
+    .card { background: #fff; padding: 20px; flex: 1; min-width: 250px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .chart-placeholder { height: 150px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #466270; font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <header><h1>Beauty Parlour Dashboard</h1></header>
+  <nav>
+    <button class="active" data-view="overview">Overview</button>
+    <button data-view="appointments">Appointments</button>
+    <button data-view="clients">Clients</button>
+  </nav>
+  <div class="container">
+    <!-- Overview Section -->
+    <section id="overview" class="view">
+      <div class="grid">
+        <div class="card">
+          <h3>Today's Bookings</h3>
+          <div id="todayBookings" class="chart-placeholder">--</div>
+        </div>
+        <div class="card">
+          <h3>Monthly Revenue</h3>
+          <div id="monthlyRevenue" class="chart-placeholder">--</div>
+        </div>
+        <div class="card">
+          <h3>New Clients</h3>
+          <div id="newClients" class="chart-placeholder">--</div>
+        </div>
+      </div>
+    </section>
+    <!-- Appointments Section -->
+    <section id="appointments" class="view" style="display:none;">
+      <h2>Upcoming Appointments</h2>
+      <table>
+        <thead><tr><th>Client</th><th>Date</th><th>Service</th><th>Stylist</th></tr></thead>
+        <tbody id="appointmentsTable"></tbody>
+      </table>
+    </section>
+    <!-- Clients Section -->
+    <section id="clients" class="view" style="display:none;">
+      <h2>Recent Clients</h2>
+      <table>
+        <thead><tr><th>Name</th><th>Joined</th><th>Visits</th></tr></thead>
+        <tbody id="clientsTable"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    // Sample data for demonstration
+    const data = {
+      todayBookings: 8,
+      monthlyRevenue: "₹ 45,000",
+      newClients: 5,
+      appointments: [
+        { name: "Meena", date: "2025-09-05", service: "Haircut", stylist: "Priya" },
+        { name: "Ravi", date: "2025-09-05", service: "Facial", stylist: "Aditi" },
+        { name: "Sunita", date: "2025-09-06", service: "Manicure", stylist: "Priya" }
+      ],
+      clients: [
+        { name: "Meena", joined: "2025-08-10", visits: 3 },
+        { name: "Ravi", joined: "2025-08-22", visits: 1 },
+        { name: "Sunita", joined: "2025-09-01", visits: 1 }
+      ]
+    };
+
+    // Populate placeholders
+    document.getElementById("todayBookings").textContent = data.todayBookings;
+    document.getElementById("monthlyRevenue").textContent = data.monthlyRevenue;
+    document.getElementById("newClients").textContent = data.newClients;
+
+    // Populate appointments table
+    const apptBody = document.getElementById("appointmentsTable");
+    data.appointments.forEach(appt => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${appt.name}</td><td>${appt.date}</td><td>${appt.service}</td><td>${appt.stylist}</td>`;
+      apptBody.appendChild(row);
+    });
+
+    // Populate clients table
+    const clientBody = document.getElementById("clientsTable");
+    data.clients.forEach(c => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${c.name}</td><td>${c.joined}</td><td>${c.visits}</td>`;
+      clientBody.appendChild(row);
+    });
+
+    // Navigation logic
+    document.querySelectorAll("nav button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".view").forEach(v => v.style.display = "none");
+        document.getElementById(btn.dataset.view).style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>
